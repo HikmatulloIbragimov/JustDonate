@@ -28,3 +28,4 @@ wcwidth==0.2.13
 gunicorn
 whitenoise
 psycopg
+psycopg2-binary==2.9.9
