@@ -6,11 +6,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", 'django-insecure-temp')  # Лучше вынести в ENV
 DEBUG = False
 
-ALLOWED_HOSTS = [
-    'justdonate-production.up.railway.app',
-    'localhost',
-    '127.0.0.1',
-]
+# ALLOWED_HOSTS = [
+#     'justdonate-production.up.railway.app',
+#     'localhost',
+#     '127.0.0.1',
+# ]
+DEBUG = True
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = [
     "https://tezkor-donat-front.vercel.app",  # если фронт на Vercel
