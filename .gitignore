@@ -2,6 +2,6 @@ yaml_exports/*
 
 .history/*
 .vscode/*
-db.slite3
+# db.slite3
 db.sqbpro
 dump.rdb
