@@ -1,18 +1,19 @@
 from pathlib import Path
 from corsheaders.defaults import default_headers
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = 'django-insecure-x*#e%6z(b&9w$2*2yq(koh@lj8qxpn)k_gl^bskbmi+=c6!!y!'
-
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", 'django-insecure-temp')  # Лучше вынести в ENV
 DEBUG = False
+
 ALLOWED_HOSTS = [
-    'tezkor.kodi.uz', 'localhost', '127.0.0.1',
-    # "balanced-pipefish-settling.ngrok-free.app" # fake
+    'justdonate-production.up.railway.app',
+    'localhost',
+    '127.0.0.1',
 ]
 
-
 CORS_ALLOWED_ORIGINS = [
-    "https://tezkor-donat-front.vercel.app",
+    "https://tezkor-donat-front.vercel.app",  # если фронт на Vercel
     "http://localhost:5173",
 ]
 
@@ -27,7 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'app',
     'transaction',
 
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # <- для отдачи static на Railway
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,7 +67,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bek.wsgi.application'
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -73,11 +74,9 @@ DATABASES = {
     }
 }
 
-
 AUTH_PASSWORD_VALIDATORS = [
-    { 'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', }
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', }
 ]
-
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
@@ -86,8 +85,7 @@ USE_TZ = True
 
 MOOGOLD_SECRET_KEY = "Eo4DjOYw28"
 MOOGOLD_PARTNER = "2cf929d9c587473dc4ae9e2f38db635a"
-
-TELEGRAM_BOT_TOKEN = "8190740090:AAEDSCuLIRCFZbPAaEZwP0JztjkG7V9M4eA"
+TELEGRAM_BOT_TOKEN = "твой_токен"
 TELEGRAM_ADMIN_ID = "8146970004"
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
@@ -95,20 +93,12 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = 'django-db'
 
-
-
-# YAML_OUTPUT_DIR = BASE_DIR / 'cdn/config/'
-
-# STATIC_URL = '/cdn/'
-# STATICFILES_DIRS = [
-#     BASE_DIR / 'cdn',
-# ]
+# 👇 Используй директории внутри проекта
+YAML_OUTPUT_DIR = BASE_DIR / 'static' / 'config'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'static'  # всё хранится в /static
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
-
-YAML_OUTPUT_DIR = '/var/www/tezkor-donat/static/config/'
-STATIC_URL = '/cdn/'
-STATIC_ROOT = '/var/www/tezkor-donat/static/'
- 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
